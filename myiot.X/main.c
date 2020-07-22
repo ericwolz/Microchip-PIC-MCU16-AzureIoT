@@ -718,12 +718,14 @@ int main(void)
     application_cloud_mqtt_connect(CFG_MQTT_HUB_HOST, &pf_mqtt_iothub_client);
 #endif //CFG_MQTT_PROVISIONING_HOST
 
+    mqttContext* mqtt_ctx = MQTT_GetClientConnectionInfo();
     while (true)
     {
       // Add your application code
       if (max_temp_changed)
       {
         send_reported_temperature_property(device_max_temp, -1, true);
+        MQTT_TransmissionHandler(mqtt_ctx);
       }
       runScheduler();
     }
