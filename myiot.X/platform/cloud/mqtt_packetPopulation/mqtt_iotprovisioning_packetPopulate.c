@@ -38,7 +38,7 @@
 #include "../../config/IoT_Sensor_Node_config.h"
 #include "../../debug_print.h"
 #include "../../../platform/cryptoauthlib/lib/basic/atca_basic.h"
-#include "az_iot_provisioning_client.h"
+#include "azure/iot/az_iot_provisioning_client.h"
 
 #ifdef CFG_MQTT_PROVISIONING_HOST
 

@@ -56,9 +56,9 @@
 #include "platform/debug_print.h"
 #include "platform/mqtt/mqtt_core/mqtt_core.h"
 #include "platform/mqtt/mqtt_packetTransfer_interface.h"
-#include "az_span.h"
-#include "az_json.h"
-#include "az_iot_hub_client.h"
+#include "azure/core/az_span.h"
+#include "azure/core/az_json.h"
+#include "azure/iot/az_iot_hub_client.h"
 
 extern az_iot_hub_client hub_client;
 extern pf_MQTT_CLIENT pf_mqqt_iotprovisioning_client;
@@ -123,42 +123,42 @@ void receivedFromCloud_message(uint8_t* topic, uint8_t* payload)
 	az_span blink = AZ_SPAN_LITERAL_FROM_STR("blink");
 	if (az_span_is_content_equal_ignoring_case(method_topic.name, blink))
 	{
-		az_json_parser json_parser;
-		az_span json = az_span_from_str((char*)payload);
-		result = az_json_parser_init(&json_parser, json);
-		if (az_failed(result))
-		{
-			debug_printError("az_json_parser_init failed");
-			return;
-		}
-
-		az_json_token token;
-		result = az_json_parser_parse_token(&json_parser, &token);
-		if (az_failed(result))
-		{
-			debug_printError("az_json_parser_parse_token failed");
-			return;
-		}
-
-		while (result == AZ_OK)
-		{
-			az_json_token_member token_member;
-			result = az_json_parser_parse_token_member(&json_parser, &token_member);
-			if (az_failed(result))
-			{
-				break;
-			}
-
-			az_span duration = AZ_SPAN_LITERAL_FROM_STR("duration");
-			if (token_member.token.kind == AZ_JSON_TOKEN_NUMBER &&
-				az_span_is_content_equal_ignoring_case(token_member.name, duration))
-			{
-				double duration;
-				result = az_json_token_get_number(&token_member.token, &duration);
-				LED_flashRed(duration);
-				break;
-			}
-		}
+//		az_json_parser json_parser;
+//		az_span json = az_span_from_str((char*)payload);
+//		result = az_json_parser_init(&json_parser, json);
+//		if (az_failed(result))
+//		{
+//			debug_printError("az_json_parser_init failed");
+//			return;
+//		}
+//
+//		az_json_token token;
+//		result = az_json_parser_parse_token(&json_parser, &token);
+//		if (az_failed(result))
+//		{
+//			debug_printError("az_json_parser_parse_token failed");
+//			return;
+//		}
+//
+//		while (result == AZ_OK)
+//		{
+//			az_json_token_member token_member;
+//			result = az_json_parser_parse_token_member(&json_parser, &token_member);
+//			if (az_failed(result))
+//			{
+//				break;
+//			}
+//
+//			az_span duration = AZ_SPAN_LITERAL_FROM_STR("duration");
+//			if (token_member.token.kind == AZ_JSON_TOKEN_NUMBER &&
+//				az_span_is_content_equal_ignoring_case(token_member.name, duration))
+//			{
+//				double duration;
+//				result = az_json_token_get_number(&token_member.token, &duration);
+//				LED_flashRed(duration);
+//				break;
+//			}
+//		}
 
 		result = az_iot_hub_client_methods_response_get_publish_topic(&hub_client, method_topic.request_id, 200, mqtt_method_topic_buf, sizeof(mqtt_method_topic_buf), NULL);
 		if (az_failed(result))
@@ -186,35 +186,35 @@ void receivedFromCloud_message(uint8_t* topic, uint8_t* payload)
 	}
 }
 
-void parse_desired_properties(az_json_parser* json_parser)
-{
-	az_result result = AZ_OK;
-	az_json_token_member token_member;
-	while (az_succeeded(result) && az_succeeded(az_json_parser_parse_token_member(json_parser, &token_member)))
-	{
-		if (az_span_is_content_equal_ignoring_case(token_member.name, changeOilReminder) && token_member.token.kind == AZ_JSON_TOKEN_STRING)
-		{
-			az_span changeOilReminderSrc;
-			result = az_json_token_get_string(&token_member.token, &changeOilReminderSrc);
-			if (az_succeeded(result))
-			{
-				az_span_to_str(desired_changeOilReminder, sizeof(desired_changeOilReminder), changeOilReminderSrc);
-			}
-		}
-		else if (az_span_is_content_equal_ignoring_case(token_member.name, maxSpeed) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
-		{
-			result = az_json_token_get_number(&token_member.token, &desired_maxSpeed);
-		}
-		else if (az_span_is_content_equal_ignoring_case(token_member.name, latitude) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
-		{
-			result = az_json_token_get_number(&token_member.token, &desired_latitude);
-		}
-		else if (az_span_is_content_equal_ignoring_case(token_member.name, longitude) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
-		{
-			result = az_json_token_get_number(&token_member.token, &desired_longitude);
-		}
-	}
-}
+//void parse_desired_properties(az_json_parser* json_parser)
+//{
+//	az_result result = AZ_OK;
+//	az_json_token_member token_member;
+//	while (az_succeeded(result) && az_succeeded(az_json_parser_parse_token_member(json_parser, &token_member)))
+//	{
+//		if (az_span_is_content_equal_ignoring_case(token_member.name, changeOilReminder) && token_member.token.kind == AZ_JSON_TOKEN_STRING)
+//		{
+//			az_span changeOilReminderSrc;
+//			result = az_json_token_get_string(&token_member.token, &changeOilReminderSrc);
+//			if (az_succeeded(result))
+//			{
+//				az_span_to_str(desired_changeOilReminder, sizeof(desired_changeOilReminder), changeOilReminderSrc);
+//			}
+//		}
+//		else if (az_span_is_content_equal_ignoring_case(token_member.name, maxSpeed) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
+//		{
+//			result = az_json_token_get_number(&token_member.token, &desired_maxSpeed);
+//		}
+//		else if (az_span_is_content_equal_ignoring_case(token_member.name, latitude) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
+//		{
+//			result = az_json_token_get_number(&token_member.token, &desired_latitude);
+//		}
+//		else if (az_span_is_content_equal_ignoring_case(token_member.name, longitude) && token_member.token.kind == AZ_JSON_TOKEN_NUMBER)
+//		{
+//			result = az_json_token_get_number(&token_member.token, &desired_longitude);
+//		}
+//	}
+//}
 
 void receivedFromCloud_twin(uint8_t* topic, uint8_t* payload)
 {
@@ -246,43 +246,43 @@ void receivedFromCloud_twin(uint8_t* topic, uint8_t* payload)
 
 	is_desired_properties_valid = true;
 
-	az_json_parser json_parser;
-	az_span json = az_span_from_str((char*)payload);
-	result = az_json_parser_init(&json_parser, json);
-	if (az_failed(result))
-	{
-		debug_printError("az_json_parser_init failed");
-		return;
-	}
-
-	az_json_token token;
-	result = az_json_parser_parse_token(&json_parser, &token);
-	if (az_failed(result))
-	{
-		debug_printError("az_json_parser_parse_token failed");
-		return;
-	}
-
-	while (token.kind == AZ_JSON_TOKEN_OBJECT_START && result == AZ_OK)
-	{
-		az_json_token_member token_member;
-		result = az_json_parser_parse_token_member(&json_parser, &token_member);
-		if (az_succeeded(result))
-		{
-			az_span desired = AZ_SPAN_LITERAL_FROM_STR("desired");
-			if (token_member.token.kind == AZ_JSON_TOKEN_OBJECT_START)
-			{
-				if (az_span_is_content_equal_ignoring_case(token_member.name, desired))
-				{
-					parse_desired_properties(&json_parser);
-				}
-				else
-				{
-					while (az_succeeded(az_json_parser_parse_token_member(&json_parser, &token_member)));
-				}
-			}
-		}
-	}
+//	az_json_parser json_parser;
+//	az_span json = az_span_from_str((char*)payload);
+//	result = az_json_parser_init(&json_parser, json);
+//	if (az_failed(result))
+//	{
+//		debug_printError("az_json_parser_init failed");
+//		return;
+//	}
+//
+//	az_json_token token;
+//	result = az_json_parser_parse_token(&json_parser, &token);
+//	if (az_failed(result))
+//	{
+//		debug_printError("az_json_parser_parse_token failed");
+//		return;
+//	}
+//
+//	while (token.kind == AZ_JSON_TOKEN_OBJECT_START && result == AZ_OK)
+//	{
+//		az_json_token_member token_member;
+//		result = az_json_parser_parse_token_member(&json_parser, &token_member);
+//		if (az_succeeded(result))
+//		{
+//			az_span desired = AZ_SPAN_LITERAL_FROM_STR("desired");
+//			if (token_member.token.kind == AZ_JSON_TOKEN_OBJECT_START)
+//			{
+//				if (az_span_is_content_equal_ignoring_case(token_member.name, desired))
+//				{
+//					parse_desired_properties(&json_parser);
+//				}
+//				else
+//				{
+//					while (az_succeeded(az_json_parser_parse_token_member(&json_parser, &token_member)));
+//				}
+//			}
+//		}
+//	}
 }
 
 void receivedFromCloud_patch(uint8_t* topic, uint8_t* payload)
@@ -313,32 +313,32 @@ void receivedFromCloud_patch(uint8_t* topic, uint8_t* payload)
 		return;
 	}
 
-	az_json_parser json_parser;
-	az_span json = az_span_from_str((char*)payload);
-	result = az_json_parser_init(&json_parser, json);
-	if (az_failed(result))
-	{
-		debug_printError("az_json_parser_init failed");
-		return;
-	}
-
-	az_json_token token;
-	result = az_json_parser_parse_token(&json_parser, &token);
-	if (az_failed(result))
-	{
-		debug_printError("az_json_parser_parse_token failed");
-		return;
-	}
-
-	while (token.kind == AZ_JSON_TOKEN_OBJECT_START && result == AZ_OK)
-	{
-		az_json_token_member token_member;
-		result = az_json_parser_parse_token_member(&json_parser, &token_member);
-		if (az_succeeded(result))
-		{
-			parse_desired_properties(&json_parser);
-		}
-	}
+//	az_json_parser json_parser;
+//	az_span json = az_span_from_str((char*)payload);
+//	result = az_json_parser_init(&json_parser, json);
+//	if (az_failed(result))
+//	{
+//		debug_printError("az_json_parser_init failed");
+//		return;
+//	}
+//
+//	az_json_token token;
+//	result = az_json_parser_parse_token(&json_parser, &token);
+//	if (az_failed(result))
+//	{
+//		debug_printError("az_json_parser_parse_token failed");
+//		return;
+//	}
+//
+//	while (token.kind == AZ_JSON_TOKEN_OBJECT_START && result == AZ_OK)
+//	{
+//		az_json_token_member token_member;
+//		result = az_json_parser_parse_token_member(&json_parser, &token_member);
+//		if (az_succeeded(result))
+//		{
+//			parse_desired_properties(&json_parser);
+//		}
+//	}
 }
 
 // This will get called every 1 second only while we have a valid Cloud connection

@@ -42,7 +42,7 @@ typedef struct
   void (*MQTT_CLIENT_receive)(uint8_t *data, uint8_t len);
   void (*MQTT_CLIENT_connect)(char* deviceID);
   bool (*MQTT_CLIENT_subscribe)();
-  void (*MQTT_CLIENT_connected)();  
+  void (*MQTT_CLIENT_connected)();
 }  pf_MQTT_CLIENT;
 
 char* url_encode_rfc3986(char* s, char* dest, size_t dest_len);

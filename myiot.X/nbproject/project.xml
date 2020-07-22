@@ -13,18 +13,8 @@
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>azure-c-sdk/sdk/iot/core/src</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/core/inc</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/core/core/src</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/platform/noplatform/src</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/core/core/inc</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/hub/inc</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/hub/src</sourceRootElem>
-                <sourceRootElem>platform</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/provisioning/inc</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/provisioning/src</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/common/src</sourceRootElem>
-                <sourceRootElem>azure-c-sdk/sdk/iot/common/inc</sourceRootElem>
+                <sourceRootElem>azure-c-sdk/sdk/src/azure/core</sourceRootElem>
+                <sourceRootElem>azure-c-sdk/sdk/src/azure/iot</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
