@@ -69,7 +69,7 @@ extern pf_MQTT_CLIENT pf_mqtt_iothub_client;
 // * PnP Values *
 // The model id is the JSON document (also called the Digital Twins Model Identifier or DTMI)
 // which defines the capability of your device. The functionality of the device should match what
-// is described in the coresponding DTMI. Should you choose to program your own PnP capable device,
+// is described in the corresponding DTMI. Should you choose to program your own PnP capable device,
 // the functionality would need to match the DTMI and you would need to update the below 'model_id'.
 // Please see the sample README for more information on this DTMI.
 const az_span device_model_id = AZ_SPAN_LITERAL_FROM_STR("dtmi:com:example:Thermostat;1");
@@ -120,17 +120,6 @@ static uint32_t device_temperature_avg_count = 1;
 static int32_t device_max_temp = DEFAULT_START_TEMP_CELSIUS;
 static int32_t device_min_temp = DEFAULT_START_TEMP_CELSIUS;
 static int32_t device_avg_temp = DEFAULT_START_TEMP_CELSIUS;
-
-//This handles messages published from the MQTT server when subscribed
-void print_span(az_span span)
-{
-  char* buffer = (char*)az_span_ptr(span);
-  for (int32_t i = 0; i < az_span_size(span); i++)
-  {
-    putchar(*buffer++);
-  }
-  (void)printf("\n");
-}
 
 // Create request id span which increments source int each call. Capable of holding 8 digit number.
 static az_span get_request_id(void)
