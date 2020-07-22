@@ -53,6 +53,7 @@ extern void receivedFromCloud_twin(uint8_t* topic, uint8_t* payload);
 extern void receivedFromCloud_patch(uint8_t* topic, uint8_t* payload);
 static const az_span twin_request_id = AZ_SPAN_LITERAL_FROM_STR("initial_get world");
 
+extern const az_span device_model_id;
 char mqtt_telemetry_topic_buf[64];
 char mqtt_get_topic_twin_buf[64];
 char username_buf[200];
@@ -162,7 +163,7 @@ void MQTT_CLIENT_iothub_connect(char* deviceID)
 	device_id = az_span_slice(device_id, 0, az_span_size(deviceID_parm));
 
 	az_iot_hub_client_options options = az_iot_hub_client_options_default();
-  options.model_id = AZ_SPAN_FROM_STR(DEVICE_MODEL_ID);
+  options.model_id = device_model_id;
 	az_result result = az_iot_hub_client_init(&hub_client, iothub_hostname, device_id, &options);
 	if (az_failed(result))
 	{

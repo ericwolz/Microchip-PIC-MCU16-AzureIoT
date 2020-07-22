@@ -72,7 +72,7 @@ extern pf_MQTT_CLIENT pf_mqtt_iothub_client;
 // is described in the coresponding DTMI. Should you choose to program your own PnP capable device,
 // the functionality would need to match the DTMI and you would need to update the below 'model_id'.
 // Please see the sample README for more information on this DTMI.
-static const az_span model_id = AZ_SPAN_LITERAL_FROM_STR("dtmi:com:example:Thermostat;1");
+const az_span device_model_id = AZ_SPAN_LITERAL_FROM_STR("dtmi:com:example:Thermostat;1");
 // ISO8601 Time Format
 static const char iso_spec_time_format[] = "%Y-%m-%dT%H:%M:%S%z";
 
