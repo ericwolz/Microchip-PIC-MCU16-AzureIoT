@@ -42,7 +42,7 @@
 
 #ifdef CFG_MQTT_PROVISIONING_HOST
 
-pf_MQTT_CLIENT pf_mqqt_iotprovisioning_client = {
+pf_MQTT_CLIENT pf_mqtt_iotprovisioning_client = {
   MQTT_CLIENT_iotprovisioning_publish,
   MQTT_CLIENT_iotprovisioning_receive,
   MQTT_CLIENT_iotprovisioning_connect,
@@ -50,9 +50,7 @@ pf_MQTT_CLIENT pf_mqqt_iotprovisioning_client = {
   MQTT_CLIENT_iotprovisioning_connected,  
 };
 
-        
-//extern void receivedFromCloud_c2d(uint8_t* topic, uint8_t* payload);
-//extern void receivedFromCloud_message(uint8_t* topic, uint8_t* payload);
+//extern void receivedFromCloud_methods(uint8_t* topic, uint8_t* payload);
 //extern void receivedFromCloud_twin(uint8_t* topic, uint8_t* payload);
 //extern void receivedFromCloud_patch(uint8_t* topic, uint8_t* payload);
 //static const az_span twin_request_id = AZ_SPAN_LITERAL_FROM_STR("initial_get world");
@@ -179,27 +177,22 @@ bool MQTT_CLIENT_iotprovisioning_subscribe()
 	cloudSubscribePacket.packetIdentifierLSB = 1;
 	cloudSubscribePacket.packetIdentifierMSB = 0;
 
-//	cloudSubscribePacket.subscribePayload[0].topic = (uint8_t*)mqtt_sub_c2d_topic_buf;
-//	cloudSubscribePacket.subscribePayload[0].topicLength = mqtt_sub_c2d_topic_buf_len;
-	cloudSubscribePacket.subscribePayload[0].requestedQoS = 0;
 //	cloudSubscribePacket.subscribePayload[1].topic = (uint8_t*)mqtt_sub_topic_methods_buf;
 //	cloudSubscribePacket.subscribePayload[1].topicLength = mqtt_sub_topic_methods_buf_len;
-	cloudSubscribePacket.subscribePayload[1].requestedQoS = 0;
+	cloudSubscribePacket.subscribePayload[0].requestedQoS = 0;
 //	cloudSubscribePacket.subscribePayload[2].topic = (uint8_t*)mqtt_sub_topic_twin_patch_buf;
 //	cloudSubscribePacket.subscribePayload[2].topicLength = mqtt_sub_topic_twin_patch_buf_len;
-	cloudSubscribePacket.subscribePayload[2].requestedQoS = 0;
+	cloudSubscribePacket.subscribePayload[1].requestedQoS = 0;
 //	cloudSubscribePacket.subscribePayload[3].topic = (uint8_t*)mqtt_sub_topic_twin_document_buf;
 //	cloudSubscribePacket.subscribePayload[3].topicLength = mqtt_sub_topic_twin_document_buf_len;
-	cloudSubscribePacket.subscribePayload[3].requestedQoS = 0;
+	cloudSubscribePacket.subscribePayload[2].requestedQoS = 0;
 
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[0].topic = (uint8_t*)mqtt_sub_c2d_topic_buf;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[0].mqttHandlePublishDataCallBack = receivedFromCloud_c2d;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[1].topic = (uint8_t*)mqtt_sub_topic_methods_buf;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[1].mqttHandlePublishDataCallBack = receivedFromCloud_message;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[2].topic = (uint8_t*)mqtt_sub_topic_twin_patch_buf;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[2].mqttHandlePublishDataCallBack = receivedFromCloud_patch;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[3].topic = (uint8_t*)mqtt_sub_topic_twin_document_buf;
-//	imqtt_iotprovisioning_publishReceiveCallBackTable[3].mqttHandlePublishDataCallBack = receivedFromCloud_twin;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[0].topic = (uint8_t*)mqtt_sub_topic_methods_buf;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[0].mqttHandlePublishDataCallBack = receivedFromCloud_methods;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[1].topic = (uint8_t*)mqtt_sub_topic_twin_patch_buf;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[1].mqttHandlePublishDataCallBack = receivedFromCloud_patch;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[2].topic = (uint8_t*)mqtt_sub_topic_twin_document_buf;
+//	imqtt_iotprovisioning_publishReceiveCallBackTable[2].mqttHandlePublishDataCallBack = receivedFromCloud_twin;
 	MQTT_SetPublishReceptionHandlerTable(imqtt_iotprovisioning_publishReceiveCallBackTable);
 
 	bool ret = MQTT_CreateSubscribePacket(&cloudSubscribePacket);

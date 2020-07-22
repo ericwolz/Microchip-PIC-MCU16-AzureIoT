@@ -123,10 +123,10 @@ void application_post_provisioning(void)
 	timeout_create(&MAIN_dataTasksTimer, MAIN_DATATASK_INTERVAL);
 }
 
-void application_cloud_mqqt_connect(char* host, pf_MQTT_CLIENT* pf_table)
+void application_cloud_mqtt_connect(char* host, pf_MQTT_CLIENT* pf_table)
 {
 	CLOUD_init_host(host, attDeviceID, pf_table);
-	timeout_create(&MAIN_dataTasksTimer, MAIN_DATATASK_INTERVAL);    
+	timeout_create(&MAIN_dataTasksTimer, MAIN_DATATASK_INTERVAL);
 }
 
 // React to the WIFI state change here. Status of 1 means connected, Status of 0 means disconnected

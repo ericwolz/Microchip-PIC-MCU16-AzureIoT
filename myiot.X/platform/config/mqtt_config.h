@@ -30,7 +30,7 @@
 
 #define TOPIC_SIZE				    512U	// Defines the topic string length allowed for Subscribe/Publish Messages  
 #define PAYLOAD_SIZE                1024U	// Defines the payload size supported for published packets
-#define MAX_NUM_TOPICS_SUBSCRIBE	4U      // Defines number of topics supported for Subscription
+#define MAX_NUM_TOPICS_SUBSCRIBE	3U      // Defines number of topics supported for Subscription
 #define NUM_TOPICS_UNSUBSCRIBE	    MAX_NUM_TOPICS_SUBSCRIBE	// Client can Un-subscribe only from those topics already subscribed 
 
 #endif // MQTT_CONFIG_H

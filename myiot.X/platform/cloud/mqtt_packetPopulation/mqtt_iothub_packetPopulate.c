@@ -40,7 +40,7 @@
 #include "../../../platform/cryptoauthlib/lib/basic/atca_basic.h"
 #include "azure/iot/az_iot_hub_client.h"
 
-pf_MQTT_CLIENT pf_mqqt_iothub_client = {
+pf_MQTT_CLIENT pf_mqtt_iothub_client = {
   MQTT_CLIENT_iothub_publish,
   MQTT_CLIENT_iothub_receive,
   MQTT_CLIENT_iothub_connect,
@@ -48,8 +48,7 @@ pf_MQTT_CLIENT pf_mqqt_iothub_client = {
   MQTT_CLIENT_iothub_connected,
 };
 
-extern void receivedFromCloud_c2d(uint8_t* topic, uint8_t* payload);
-extern void receivedFromCloud_message(uint8_t* topic, uint8_t* payload);
+extern void receivedFromCloud_methods(uint8_t* topic, uint8_t* payload);
 extern void receivedFromCloud_twin(uint8_t* topic, uint8_t* payload);
 extern void receivedFromCloud_patch(uint8_t* topic, uint8_t* payload);
 static const az_span twin_request_id = AZ_SPAN_LITERAL_FROM_STR("initial_get world");
@@ -163,6 +162,7 @@ void MQTT_CLIENT_iothub_connect(char* deviceID)
 	device_id = az_span_slice(device_id, 0, az_span_size(deviceID_parm));
 
 	az_iot_hub_client_options options = az_iot_hub_client_options_default();
+  options.model_id = AZ_SPAN_FROM_STR(DEVICE_MODEL_ID);
 	az_result result = az_iot_hub_client_init(&hub_client, iothub_hostname, device_id, &options);
 	if (az_failed(result))
 	{
@@ -235,27 +235,22 @@ bool MQTT_CLIENT_iothub_subscribe()
 	cloudSubscribePacket.packetIdentifierLSB = 1;
 	cloudSubscribePacket.packetIdentifierMSB = 0;
 
-	cloudSubscribePacket.subscribePayload[0].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
-	cloudSubscribePacket.subscribePayload[0].topicLength = sizeof(AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC) - 1;
+	cloudSubscribePacket.subscribePayload[0].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
+	cloudSubscribePacket.subscribePayload[0].topicLength = sizeof(AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC) - 1;
 	cloudSubscribePacket.subscribePayload[0].requestedQoS = 0;
-	cloudSubscribePacket.subscribePayload[1].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
-	cloudSubscribePacket.subscribePayload[1].topicLength = sizeof(AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC) - 1;
+	cloudSubscribePacket.subscribePayload[1].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
+	cloudSubscribePacket.subscribePayload[1].topicLength = sizeof(AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC) - 1;
 	cloudSubscribePacket.subscribePayload[1].requestedQoS = 0;
-	cloudSubscribePacket.subscribePayload[2].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
-	cloudSubscribePacket.subscribePayload[2].topicLength = sizeof(AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC) - 1;
+	cloudSubscribePacket.subscribePayload[2].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
+	cloudSubscribePacket.subscribePayload[2].topicLength = sizeof(AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC) - 1;
 	cloudSubscribePacket.subscribePayload[2].requestedQoS = 0;
-	cloudSubscribePacket.subscribePayload[3].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
-	cloudSubscribePacket.subscribePayload[3].topicLength = sizeof(AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC) - 1;
-	cloudSubscribePacket.subscribePayload[3].requestedQoS = 0;
 
-	imqtt_iothub_publishReceiveCallBackTable[0].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
-	imqtt_iothub_publishReceiveCallBackTable[0].mqttHandlePublishDataCallBack = receivedFromCloud_c2d;
-	imqtt_iothub_publishReceiveCallBackTable[1].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
-	imqtt_iothub_publishReceiveCallBackTable[1].mqttHandlePublishDataCallBack = receivedFromCloud_message;
-	imqtt_iothub_publishReceiveCallBackTable[2].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
-	imqtt_iothub_publishReceiveCallBackTable[2].mqttHandlePublishDataCallBack = receivedFromCloud_patch;
-	imqtt_iothub_publishReceiveCallBackTable[3].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
-	imqtt_iothub_publishReceiveCallBackTable[3].mqttHandlePublishDataCallBack = receivedFromCloud_twin;
+	imqtt_iothub_publishReceiveCallBackTable[0].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
+	imqtt_iothub_publishReceiveCallBackTable[0].mqttHandlePublishDataCallBack = receivedFromCloud_methods;
+	imqtt_iothub_publishReceiveCallBackTable[1].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
+	imqtt_iothub_publishReceiveCallBackTable[1].mqttHandlePublishDataCallBack = receivedFromCloud_patch;
+	imqtt_iothub_publishReceiveCallBackTable[2].topic = (uint8_t*) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
+	imqtt_iothub_publishReceiveCallBackTable[2].mqttHandlePublishDataCallBack = receivedFromCloud_twin;
 	MQTT_SetPublishReceptionHandlerTable(imqtt_iothub_publishReceiveCallBackTable);
 
 	bool ret = MQTT_CreateSubscribePacket(&cloudSubscribePacket);
