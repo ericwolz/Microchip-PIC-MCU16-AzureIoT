@@ -7,11 +7,10 @@ This page shows the steps needed to get started with the [Microchip PIC 16](http
 Before proceeding, you should have the following ready:
 
 - [Setup your Azure IoT hub](https://github.com/Azure/azure-iot-device-ecosystem/blob/master/setup_iothub.md)
-
+- [Azure IoT Explorer](https://github.com/Azure/azure-iot-explorer/releases)
+- Download the PnP DTMI [here](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/samples/Thermostat.json)
 - [MPLAB X IDE V5.30 or later](https://www.microchip.com/mplab/mplab-x-ide)
-
 - [XC16 Compiler v1.50 or later](https://www.microchip.com/mplab/compilers)
-
 - MPLAB code configurator (Once you finish the installation of the previous items, open MPLAB X IDE, then click Tools > Plugin Download > search for MPLAB code configurator and install it)
 
 ![code-configurator](docs/Images/code_configurator.png)  
@@ -32,7 +31,7 @@ The device_ID on both IoT hub and the device itself must match, so before creati
 
 - You can find the device_id on the IoT_Sensor_Node_config.h file.
 - To find it, on the left hand panel, look for Header files > platform > config > IoT_Sensor_Node_config.h
-- Line 39 shows the #define DEVICE_ID "your_device_number"
+- Line 39 shows the ``#define DEVICE_ID "your_device_number"`
 
 ![sensor node](docs/Images/sensor_node.png)
 
@@ -55,7 +54,7 @@ Create a new device on your IoT Hub using this device as your device name.
 2. Update the device_key and MQTT_Host
 
     - On the left hand panel, look for Header files > platform > config > IoT_Sensor_Node_config.h
-    - Line 44 shows the DEVICE_KEY: replace it by the Primary Key you find at your device page on Azure Portal.
+    - Line 44 shows the `DEVICE_KEY`: replace it by the Primary Key you find at your device page on Azure Portal.
     - Still on this file, look at line 23 and update the `CFG_MQTT_HOST` information.
     - You'll need your device's primary connection string for that.
 
@@ -73,10 +72,13 @@ HostName=**ps-demo-hub.azure-devices.net**;DeviceId=Pic_test_2;SharedAccessKey=P
 
 2. If everything went well, you should see the onboard LEDs turning on. The blue and the green LEDs will be on all the time and the yellow one blinks every 5 seconds to confirm the telemetry has been sent to Azure.
 
-### Calling a direct method on the device
+### Interacting with Your PnP Device
 
-1. On your device window on Azure, click Direct Method
-2. On the direct method window, type blink on the Method Name, type {"duration":3}  on the payload, and click "Invoke method". 
-3. You should see the red LED turning on for 3 seconds and then turning back off again.
+Once the board is flashed, you can proceed to interact with the PnP device using the IoT Explorer. The following steps make it as seamless as possible.
 
-![direct_method](docs/Images/direct_method.png)
+- Once you open the tool, on the left side, there should be a tab called "IoT Plug and Play Settings". Open that tab and add the directory where you downloaded the DTMI detailed from [prerequisites](#prerequisites)
+- Paste in the connection string for your IoT Hub from the portal.
+- Find your device listed after clicking on your newly connected IoT Hub and navigate to the left hand side where you will find a "IoT Plug and Play components" tab.
+- There, click on the component listed near the bottom and use the tabs that result on the top to use the various features (Commands, Twin, Telemetry, etc). It should look similar to the picture below.
+
+    ![Iot Explorer](./docs/Images/iotexplorer.png)
