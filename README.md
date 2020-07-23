@@ -76,7 +76,7 @@ HostName=**ps-demo-hub.azure-devices.net**;DeviceId=Pic_test_2;SharedAccessKey=P
 
 Once the board is flashed, you can proceed to interact with the PnP device using the IoT Explorer. The following steps make it as seamless as possible.
 
-- Once you open the tool, on the left side, there should be a tab called "IoT Plug and Play Settings". Open that tab and add the directory where you downloaded the DTMI detailed from [prerequisites](#prerequisites)
+- Once you open the tool, on the left side, there should be a tab called "IoT Plug and Play Settings". Open that tab and add the directory where you downloaded the DTMI detailed from [prerequisites](#prerequisites).
 - Paste in the connection string for your IoT Hub from the portal.
 - Find your device listed after clicking on your newly connected IoT Hub and navigate to the left hand side where you will find a "IoT Plug and Play components" tab.
 - There, click on the component listed near the bottom and use the tabs that result on the top to use the various features (Commands, Twin, Telemetry, etc). It should look similar to the picture below.
