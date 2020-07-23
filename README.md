@@ -74,7 +74,7 @@ HostName=**ps-demo-hub.azure-devices.net**;DeviceId=Pic_test_2;SharedAccessKey=P
 
 ### Interacting with Your PnP Device
 
-Once the board is flashed, you can proceed to interact with the PnP device using the IoT Explorer. The following steps make it as seamless as possible.
+Once the board is flashed, you can proceed to interact with the PnP device using the Azure IoT Explorer. The following steps make it as seamless as possible.
 
 - Once you open the tool, on the left side, there should be a tab called "IoT Plug and Play Settings". Open that tab and add the directory where you downloaded the DTMI detailed from [prerequisites](#prerequisites).
 - Paste in the connection string for your IoT Hub from the portal.
